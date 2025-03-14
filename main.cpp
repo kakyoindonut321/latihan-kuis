@@ -104,6 +104,15 @@ void bukaList(string array[ARRAY_SIZE])
     fclose(fptr);
 }
 
+void shift_down_1(string *arr)
+{
+    for (int i = 0; i < ARRAY_SIZE - 1; i++)
+    {
+        arr[i] = arr[i + 1];
+    }
+    arr[ARRAY_SIZE - 1] = "";
+}
+
 void simpenList(string array[ARRAY_SIZE])
 {
     FILE *fptr = fopen(FILE_NAME, "wb");
@@ -171,9 +180,10 @@ void tambah(int opsional_index = -1)
     }
 
     quicksort(array, 0, index_terbesar + 1);
+    shift_down_1(array);
     simpenList(array);
 
-    cout << "berhasil tambah file" << endl;
+    cout << "berhasil tambah ke file" << endl;
 }
 
 void edit()
@@ -205,7 +215,7 @@ void edit()
     const char *cstr = ext_newf.c_str();
 
     remove(cstr);
-    cout << "file berhasil dihapus";
+    cout << "file berhasil dihapus" << endl;
     tambah(index_ketemu);
 }
 
@@ -221,7 +231,7 @@ void tampil()
             break;
     }
     cout << endl;
-    cout << "  Playlist Lagu" << endl;
+    cout << "      Lagu" << endl;
     cout << "==================" << endl;
     if (index_terbesar < 1)
     {
