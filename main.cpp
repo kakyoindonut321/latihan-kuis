@@ -129,7 +129,7 @@ void tambah(int opsional_index = -1)
     int tahun;
 
     cout << "	masukan judul		: ";
-    // cin.ignore();
+    cin.ignore();
     getline(cin, judul);
     cout << "	masukan penyanyi	: ";
     // cin.ignore();
@@ -178,9 +178,10 @@ void tambah(int opsional_index = -1)
 
 void edit()
 {
-    string judul;
+    string judul_lagu;
     cout << "masukan judul lagu : ";
-    getline(cin, judul);
+    cin.ignore();
+    getline(cin, judul_lagu);
 
     string array[ARRAY_SIZE];
     bukaList(array);
@@ -193,21 +194,19 @@ void edit()
         index_terbesar = i;
     }
 
-    int index_ketemu = binary_search(array, judul, index_terbesar);
-    if (index_ketemu > -1)
+    int index_ketemu = binary_search(array, judul_lagu, index_terbesar);
+    if (index_ketemu < -1)
     {
         cout << "Data tidak ditemukan" << endl;
         return;
     }
 
-    string ext = "lagu/" + array[index_ketemu] + ".dat";
-    const char *cstr = ext.c_str();
+    string ext_newf = "lagu/" + array[index_ketemu] + ".dat";
+    const char *cstr = ext_newf.c_str();
 
     remove(cstr);
     cout << "file berhasil dihapus";
     tambah(index_ketemu);
-
-    // simpenList(array);
 }
 
 void tampil()
@@ -221,7 +220,9 @@ void tampil()
         if (array[i] == "")
             break;
     }
-
+    cout << endl;
+    cout << "  Playlist Lagu" << endl;
+    cout << "==================" << endl;
     if (index_terbesar < 1)
     {
         cout << "playlist kosong";
