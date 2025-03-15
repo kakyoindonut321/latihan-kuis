@@ -39,26 +39,26 @@ void quicksort(string *array, int awal, int akhir)
         quicksort(array, low, akhir);
 }
 
-int binary_search(string *arrayPlaylist, string pencarian, int index_akhir)
+int binary_search(string *arrp, string cari, int i_ak)
 {
-    int index_awal = 0;
+    int i_aw = 0;
     bool search = false;
-    while (search == false && index_awal <= index_akhir)
+    while (search == false && i_aw <= i_ak)
     {
-        int mid = (index_awal + index_akhir) / 2;
-        if (arrayPlaylist[mid] == pencarian)
+        int mid = (i_aw + i_ak) / 2;
+        if (arrp[mid] == cari)
         {
             return mid;
         }
         else
         {
-            if (pencarian < arrayPlaylist[mid])
+            if (cari < arrp[mid])
             {
-                index_akhir = mid - 1;
+                i_ak = mid - 1;
             }
             else
             {
-                index_awal = mid + 1;
+                i_aw = mid + 1;
             }
         }
     }
@@ -67,20 +67,20 @@ int binary_search(string *arrayPlaylist, string pencarian, int index_akhir)
 
 void initfile()
 {
-    FILE *file = fopen(FILE_NAME, "rb");
-    if (!file)
+    FILE *fptr = fopen(FILE_NAME, "rb");
+    if (!fptr)
     {
-        file = fopen(FILE_NAME, "wb");
+        fptr = fopen(FILE_NAME, "wb");
         char empty[STRING_SIZE] = {0};
         for (int i = 0; i < ARRAY_SIZE; i++)
         {
-            fwrite(empty, sizeof(char), STRING_SIZE, file);
+            fwrite(empty, sizeof(char), STRING_SIZE, fptr);
         }
-        fclose(file);
+        fclose(fptr);
     }
     else
     {
-        fclose(file);
+        fclose(fptr);
     }
 }
 
@@ -152,11 +152,6 @@ void tambah(int opsional_index = -1)
     FILE *fptr_lagu;
 
     string str_judul = tmp.judul;
-
-    cout << "	judul		: " << tmp.judul << endl;
-    cout << "	penyanyi	: " << tmp.penyanyi << endl;
-    cout << "	genre		: " << tmp.genre << endl;
-    cout << "	tahun		: " << tmp.tahun << endl;
 
     string add_ext = "lagu/" + str_judul + ".dat";
     const char *cstr = add_ext.c_str(); // shortcut yang tidak diajari karna tidak ada cara lain
@@ -284,7 +279,6 @@ void cari()
     lagu data_lagu;
 
     fptr_lagu = fopen(cstr, "rb");
-    cout << cstr << endl;
     // fread(&data_lagu, sizeof(lagu), 1, fptr_lagu);
 
     cout << "Data ditemukan!" << endl;
