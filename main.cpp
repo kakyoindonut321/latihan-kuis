@@ -153,10 +153,15 @@ void tambah(int opsional_index = -1)
 
     string str_judul = tmp.judul;
 
+    cout << "	judul		: " << tmp.judul << endl;
+    cout << "	penyanyi	: " << tmp.penyanyi << endl;
+    cout << "	genre		: " << tmp.genre << endl;
+    cout << "	tahun		: " << tmp.tahun << endl;
+
     string add_ext = "lagu/" + str_judul + ".dat";
     const char *cstr = add_ext.c_str(); // shortcut yang tidak diajari karna tidak ada cara lain
 
-    fptr_lagu = fopen(cstr, "w+");
+    fptr_lagu = fopen(cstr, "wb");
     fwrite(&tmp, sizeof(lagu), 1, fptr_lagu);
     fclose(fptr_lagu);
 
@@ -207,7 +212,7 @@ void edit()
     }
 
     int index_ketemu = binary_search(array, judul_lagu, index_terbesar);
-    if (index_ketemu < -1)
+    if (index_ketemu < 0)
     {
         cout << "Data tidak ditemukan" << endl;
         return;
@@ -266,7 +271,7 @@ void cari()
     }
 
     int index_ketemu = binary_search(array, judul_lagu, index_terbesar);
-    if (index_ketemu < -1)
+    if (index_ketemu < 0)
     {
         cout << "Data tidak ditemukan" << endl;
         return;
@@ -278,14 +283,19 @@ void cari()
     FILE *fptr_lagu;
     lagu data_lagu;
 
-    fptr_lagu = fopen(cstr, "wb");
-    fread(&data_lagu, sizeof(lagu), 1, fptr_lagu);
+    fptr_lagu = fopen(cstr, "rb");
+    cout << cstr << endl;
+    // fread(&data_lagu, sizeof(lagu), 1, fptr_lagu);
 
     cout << "Data ditemukan!" << endl;
-    cout << "	judul		: " << data_lagu.judul << endl;
-    cout << "	penyanyi	: " << data_lagu.penyanyi << endl;
-    cout << "	genre		: " << data_lagu.genre << endl;
-    cout << "	tahun		: " << data_lagu.tahun << endl;
+    while (fread(&data_lagu, sizeof(lagu), 1, fptr_lagu))
+    {
+        cout << "	judul		: " << data_lagu.judul << endl;
+        cout << "	penyanyi	: " << data_lagu.penyanyi << endl;
+        cout << "	genre		: " << data_lagu.genre << endl;
+        cout << "	tahun		: " << data_lagu.tahun << endl;
+    }
+
     cout << endl;
     fclose(fptr_lagu);
 }
