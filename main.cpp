@@ -9,9 +9,9 @@ using namespace std;
 
 typedef struct
 {
-    string judul;
-    string penyanyi;
-    string genre;
+    char judul[255];
+    char penyanyi[255];
+    char genre[255];
     int tahun;
 } lagu;
 
@@ -134,25 +134,26 @@ void simpenList(string array[ARRAY_SIZE])
 
 void tambah(int opsional_index = -1)
 {
-    string judul, penyanyi, genre;
     int tahun;
 
+    lagu tmp;
     cout << "	masukan judul		: ";
     cin.ignore();
-    getline(cin, judul);
+    // getline(cin, judul);
+    cin.getline(tmp.judul, 255);
     cout << "	masukan penyanyi	: ";
-    // cin.ignore();
-    getline(cin, penyanyi);
+    cin.getline(tmp.penyanyi, 255);
     cout << "	masukan genre		: ";
-    // cin.ignore();
-    getline(cin, genre);
+    cin.getline(tmp.genre, 255);
     cout << "	masukan tahun		: ";
     cin >> tahun;
+    tmp.tahun = tahun;
 
-    lagu tmp = {judul, penyanyi, genre, tahun};
     FILE *fptr_lagu;
 
-    string add_ext = "lagu/" + judul + ".dat";
+    string str_judul = tmp.judul;
+
+    string add_ext = "lagu/" + str_judul + ".dat";
     const char *cstr = add_ext.c_str(); // shortcut yang tidak diajari karna tidak ada cara lain
 
     fptr_lagu = fopen(cstr, "w+");
@@ -172,15 +173,16 @@ void tambah(int opsional_index = -1)
     }
     if (opsional_index < 0)
     {
-        array[index_terbesar + 1] = judul;
+        array[index_terbesar + 1] = str_judul;
+        quicksort(array, 0, index_terbesar + 1);
     }
     else
     {
-        array[opsional_index] = judul;
+        array[opsional_index] = str_judul;
+        quicksort(array, 0, index_terbesar + 1);
+        shift_down_1(array);
     }
 
-    quicksort(array, 0, index_terbesar + 1);
-    shift_down_1(array);
     simpenList(array);
 
     cout << "berhasil tambah ke file" << endl;
@@ -247,9 +249,10 @@ void tampil()
 
 void cari()
 {
-    string judul;
+    string judul_lagu;
     cout << "masukan judul lagu : ";
-    getline(cin, judul);
+    cin.ignore();
+    getline(cin, judul_lagu);
 
     string array[ARRAY_SIZE];
     bukaList(array);
@@ -262,22 +265,21 @@ void cari()
         index_terbesar = i;
     }
 
-    int index_ketemu = binary_search(array, judul, index_terbesar);
-    if (index_ketemu > -1)
+    int index_ketemu = binary_search(array, judul_lagu, index_terbesar);
+    if (index_ketemu < -1)
     {
         cout << "Data tidak ditemukan" << endl;
         return;
     }
 
-    string ext = "lagu/" + array[index_ketemu] + ".dat";
-    const char *cstr = ext.c_str();
+    string ext_newf = "lagu/" + array[index_ketemu] + ".dat";
+    const char *cstr = ext_newf.c_str();
 
     FILE *fptr_lagu;
     lagu data_lagu;
 
     fptr_lagu = fopen(cstr, "wb");
     fread(&data_lagu, sizeof(lagu), 1, fptr_lagu);
-    fclose(fptr_lagu);
 
     cout << "Data ditemukan!" << endl;
     cout << "	judul		: " << data_lagu.judul << endl;
@@ -285,6 +287,7 @@ void cari()
     cout << "	genre		: " << data_lagu.genre << endl;
     cout << "	tahun		: " << data_lagu.tahun << endl;
     cout << endl;
+    fclose(fptr_lagu);
 }
 
 int main()
